@@ -16,45 +16,88 @@ const writeFileAsync = util.promisify(fs.writeFile);
 let teamMembers = []
 // Write code to use inquirer to gather information about the development team members,
 async function promptUser() {
-    
-        const choice = await inquirer.prompt([
 
-            {
-                type: "list",
-                message: "What type of employee would you like to add?",
-                name: "employeeRole",
-                choices: [
-                    { name: "Manager", value: "Manager" },
-                    { name: "Intern", value: "Intern" },
-                    { name: "Engineer", value: "Engineer" }
-                ]
-            },
-        ])
+    const choice = await inquirer.prompt([
 
-        if (choice.employeeRole === "Manager") {
+        {
+            type: "list",
+            message: "What type of employee would you like to add?",
+            name: "employeeRole",
+            choices: [
+                { name: "Manager", value: "Manager" },
+                { name: "Intern", value: "Intern" },
+                { name: "Engineer", value: "Engineer" }
+            ]
+        },
+    ])
 
-            await promptManager()
+    if (choice.employeeRole === "Manager") {
 
-        }
-
-        else if (choice.employeeRole === "Engineer") {
-
-            await promptEngineer()
-
-        }
-
-        else {
-
-            await promptIntern()
-
-        }
+        await promptManager()
 
     }
+
+    else if (choice.employeeRole === "Engineer") {
+
+        await promptEngineer()
+
+    }
+
+    else {
+
+        await promptIntern()
+
+    }
+
+}
 
 
 
 async function promptEngineer() {
 
+    let engineer = await inquirer.prompt([
+
+        {
+            type: "input",
+            message: "What is your engineer's name?",
+            name: "engineerName",
+            default: "Space Man"
+        },
+
+        {
+            type: "input",
+            message: "What is your engineer's ID?",
+            name: "engineerId",
+            default: "0101011010101101"
+        },
+
+        {
+            type: "input",
+            message: "What is your engineer's email address?",
+            name: "engineerEmail",
+            default: "space.com"
+        },
+
+        {
+            type: "input",
+            message: "What is your engineer's Github?",
+            name: "engineerGithub",
+            default: "Spacemanhub"
+        },
+
+    ]);
+    const NewEngineer = new Engineer(
+
+        engineer.engineerName,
+        engineer.engineerId,
+        engineer.engineerEmail,
+        engineer.engineerSchool
+
+    )
+
+    teamMembers.push(NewEngineer)
+
+    console.log(teamMembers)
 
 }
 
@@ -102,15 +145,55 @@ async function promptManager() {
     )
 
     teamMembers.push(NewManager)
-    
-
 
 }
 
 
 async function promptIntern() {
 
+    let intern = await inquirer.prompt([
 
+        {
+            type: "input",
+            message: "What is your intern's name?",
+            name: "internName",
+            default: "Jimbo"
+        },
+
+        {
+            type: "input",
+            message: "What is your intern's ID?",
+            name: "internId",
+            default: "1111111"
+        },
+
+        {
+            type: "input",
+            message: "What is your intern's email address?",
+            name: "internEmail",
+            default: "jimbo@jimbo.net"
+        },
+
+        {
+            type: "input",
+            message: "What School did your intern go to?",
+            name: "internSchool",
+            default: "Cool School"
+        },
+
+    ]);
+    const NewIntern = new Intern(
+
+        intern.internName,
+        intern.internId,
+        intern.internEmail,
+        intern.internSchool
+
+    )
+
+    teamMembers.push(NewIntern)
+
+    console.log(teamMembers)
 
 }
 
