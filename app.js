@@ -138,7 +138,7 @@ async function promptManager() {
         },
 
     ]);
-    const NewManager = new Manager(
+    const NewManager = new Manager (
 
         manager.managerName,
         manager.managerId,
@@ -226,9 +226,6 @@ console.log(addEmployee)
     }
 
 }
-
-
-
 
 
 promptUser()
