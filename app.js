@@ -4,33 +4,118 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util")
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const writeFileAsync = util.promisify(fs.writeFile);
 
+let teamMembers = []
 // Write code to use inquirer to gather information about the development team members,
-function promptUser() {
-    inquirer.prompt([
+async function promptUser() {
+    
+        const choice = await inquirer.prompt([
 
-        {
+            {
+                type: "list",
+                message: "What type of employee would you like to add?",
+                name: "employeeRole",
+                choices: [
+                    { name: "Manager", value: "Manager" },
+                    { name: "Intern", value: "Intern" },
+                    { name: "Engineer", value: "Engineer" }
+                ]
+            },
+        ])
 
+        if (choice.employeeRole === "Manager") {
 
-            type: "checkbox",
-            message: "What type of employee would you like to add?",
-            name: "employeeRole",
-            choices: [
-                { name: "Manager", value: "Manager" },
-                { name: "Intern", value: "Intern" },
-                { name: "Engineer", value: "Engineer" }
-            ]
+            await promptManager()
+
         }
-    ])
+
+        else if (choice.employeeRole === "Engineer") {
+
+            await promptEngineer()
+
+        }
+
+        else {
+
+            await promptIntern()
+
+        }
+
+    }
+
+
+
+async function promptEngineer() {
+
 
 }
+
+
+async function promptManager() {
+
+    let manager = await inquirer.prompt([
+
+        {
+            type: "input",
+            message: "What is your manager's name?",
+            name: "managerName",
+            default: "Bill Bob Sr."
+        },
+
+        {
+            type: "input",
+            message: "What is your manager's ID?",
+            name: "managerId",
+            default: "1234-4321"
+        },
+
+        {
+            type: "input",
+            message: "What is your manager's email address?",
+            name: "managerEmail",
+            default: "Bill.Bob.Sr@billbob.net"
+        },
+
+        {
+            type: "input",
+            message: "What is your manager's office number?",
+            name: "managerOffice",
+            default: "Big office on the corner"
+        },
+
+    ]);
+    const NewManager = new Manager(
+
+        manager.managerName,
+        manager.managerId,
+        manager.managerEmail,
+        manager.managerOffice
+
+    )
+
+    teamMembers.push(NewManager)
+    
+
+
+}
+
+
+async function promptIntern() {
+
+
+
+}
+
 promptUser()
+
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 // After the user has input all employees desired, call the `render` function (required
