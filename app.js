@@ -13,6 +13,8 @@ const render = require("./lib/htmlRenderer");
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
+
+
 let teamMembers = []
 // Write code to use inquirer to gather information about the development team members,
 async function promptUser() {
@@ -48,6 +50,7 @@ async function promptUser() {
         await promptIntern()
 
     }
+
 
 }
 
@@ -91,13 +94,13 @@ async function promptEngineer() {
         engineer.engineerName,
         engineer.engineerId,
         engineer.engineerEmail,
-        engineer.engineerSchool
+        engineer.engineerGithub
 
     )
 
     teamMembers.push(NewEngineer)
 
-    console.log(teamMembers)
+    await promptNewEmp()
 
 }
 
@@ -146,6 +149,7 @@ async function promptManager() {
 
     teamMembers.push(NewManager)
 
+    await promptNewEmp()
 }
 
 
@@ -193,9 +197,39 @@ async function promptIntern() {
 
     teamMembers.push(NewIntern)
 
-    console.log(teamMembers)
+    await promptNewEmp()
+
 
 }
+
+async function promptNewEmp() {
+
+    let addEmployee = await inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Would you like to add more employee's to your team?",
+            name: "addMore"
+
+        }
+    ])
+console.log(addEmployee)
+    if (addEmployee.addMore === true) {
+
+        await promptUser()
+        
+    }
+    else {
+
+        const html = await render(teamMembers);
+        await writeFileAsync(outputPath, html);
+
+    }
+
+}
+
+
+
+
 
 promptUser()
 
